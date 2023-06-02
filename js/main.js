@@ -22,21 +22,41 @@ form.onsubmit = function (e) {
 const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
 
 
+
 // Выполняем зарос
 
     fetch(url)
     .then((response) => response.json())
     .then((data) => {
+
+      
       console.log(data);
-      console.log(data.location.name);
-      console.log(data.location.country);
-      console.log(data.current.temp_c);
-      console.log(data.current.condition.text);
+
+      // Проверяем ошибку
+
+      if (data.error) {
+        // Если есть ошибка -выводим его
+
+        // Удаляем предыдующую карточку
+        const prevCard = document.querySelector('.card');
+        if (prevCard)prevCard.remove();
 
 
-      // Отображаем полученные данные на карточке
+        // Отобразить карточку с ошибкой
+        const html = `<div class="card">${data.error.message}</div>`
+        
+        header.insertAdjacentHTML('afterend', html)
 
-      // Удаляем предыдующую карточку
+
+      }else {
+
+        // Если ошибки нет -выводим карту
+        // Отображаем полученные данные на карточке
+
+        // Удаляем предыдующую карточку
+        const prevCard = document.querySelector('.card');
+        if (prevCard)prevCard.remove();
+      
 
       // создаем разметку для карточки
         const html = `<div class="card">
@@ -55,6 +75,8 @@ const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
       // Отображаем карточку на странице
 
       header.insertAdjacentHTML('afterend', html)
+
+      }
 
     });
 
